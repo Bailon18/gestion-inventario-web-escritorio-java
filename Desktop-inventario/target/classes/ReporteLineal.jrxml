@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="167b835f-4db1-43a2-ab30-f5f8bb23b1b4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="LineasDS" uuid="dfab85b4-fc19-4fda-a742-6d8161e468cd">
+		<queryString language="SQL">
+			<![CDATA[WITH Meses AS (
+    SELECT 1 AS mes
+    UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
+    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10
+    UNION ALL SELECT 11 UNION ALL SELECT 12
+)
+SELECT 
+    CASE 
+        WHEN m.mes = 1 THEN 'Enero'
+        WHEN m.mes = 2 THEN 'Febrero'
+        WHEN m.mes = 3 THEN 'Marzo'
+        WHEN m.mes = 4 THEN 'Abril'
+        WHEN m.mes = 5 THEN 'Mayo'
+        WHEN m.mes = 6 THEN 'Junio'
+        WHEN m.mes = 7 THEN 'Julio'
+        WHEN m.mes = 8 THEN 'Agosto'
+        WHEN m.mes = 9 THEN 'Septiembre'
+        WHEN m.mes = 10 THEN 'Octubre'
+        WHEN m.mes = 11 THEN 'Noviembre'
+        WHEN m.mes = 12 THEN 'Diciembre'
+    END AS mes,
+    COALESCE(SUM(movimientos.total_ingreso - movimientos.total_salida), 0) AS total_movimiento
+FROM 
+    Meses m
+LEFT JOIN (
+    SELECT 
+        MONTH(ing.fecha) AS mes,
+        SUM(COALESCE(di.cantidad, 0)) AS total_ingreso,
+        0 AS total_salida
+    FROM 
+        ingresoinventario ing
+    LEFT JOIN 
+        detalle_ingreso di ON ing.idIngreso = di.idIngreso
+    GROUP BY 
+        MONTH(ing.fecha)
+
+    UNION ALL
+
+    SELECT 
+        MONTH(s.fecha) AS mes,
+        0 AS total_ingreso,
+        SUM(COALESCE(ds.cantidad, 0)) AS total_salida
+    FROM 
+        salidainventario s
+    LEFT JOIN 
+        detalle_salida ds ON s.idSalida = ds.idSalida
+    GROUP BY 
+        MONTH(s.fecha)
+) AS movimientos
+ON 
+    m.mes = movimientos.mes
+GROUP BY 
+    m.mes
+ORDER BY 
+    m.mes;
+]]>
+		</queryString>
+		<field name="mes" class="java.lang.String"/>
+		<field name="total_movimiento" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="New Dataset 1" uuid="21047a72-4099-45c6-82cf-d5624d5190ea">
+		<queryString language="SQL">
+			<![CDATA[WITH Meses AS (
+    SELECT 1 AS mes
+    UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
+    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10
+    UNION ALL SELECT 11 UNION ALL SELECT 12
+)
+SELECT 
+    CASE 
+        WHEN m.mes = 1 THEN 'Enero'
+        WHEN m.mes = 2 THEN 'Febrero'
+        WHEN m.mes = 3 THEN 'Marzo'
+        WHEN m.mes = 4 THEN 'Abril'
+        WHEN m.mes = 5 THEN 'Mayo'
+        WHEN m.mes = 6 THEN 'Junio'
+        WHEN m.mes = 7 THEN 'Julio'
+        WHEN m.mes = 8 THEN 'Agosto'
+        WHEN m.mes = 9 THEN 'Septiembre'
+        WHEN m.mes = 10 THEN 'Octubre'
+        WHEN m.mes = 11 THEN 'Noviembre'
+        WHEN m.mes = 12 THEN 'Diciembre'
+    END AS mes,
+    COALESCE(SUM(movimientos.total_ingreso - movimientos.total_salida), 0) AS total_movimiento
+FROM 
+    Meses m
+LEFT JOIN (
+    SELECT 
+        MONTH(ing.fecha) AS mes,
+        SUM(COALESCE(di.cantidad, 0)) AS total_ingreso,
+        0 AS total_salida
+    FROM 
+        ingresoinventario ing
+    LEFT JOIN 
+        detalle_ingreso di ON ing.idIngreso = di.idIngreso
+    GROUP BY 
+        MONTH(ing.fecha)
+
+    UNION ALL
+
+    SELECT 
+        MONTH(s.fecha) AS mes,
+        0 AS total_ingreso,
+        SUM(COALESCE(ds.cantidad, 0)) AS total_salida
+    FROM 
+        salidainventario s
+    LEFT JOIN 
+        detalle_salida ds ON s.idSalida = ds.idSalida
+    GROUP BY 
+        MONTH(s.fecha)
+) AS movimientos
+ON 
+    m.mes = movimientos.mes
+GROUP BY 
+    m.mes
+ORDER BY 
+    m.mes;
+]]>
+		</queryString>
+		<field name="mes" class="java.lang.String"/>
+		<field name="total_movimiento" class="java.math.BigDecimal"/>
+	</subDataset>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<barChart>
+				<chart>
+					<reportElement x="14" y="0" width="488" height="125" uuid="bd78733b-94ac-4f7c-bfec-e6de8f69bc8b"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="New Dataset 1" uuid="dc9aa1e7-86bf-4535-b6c3-0386214b2f2a"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{mes}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{mes}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{total_movimiento}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

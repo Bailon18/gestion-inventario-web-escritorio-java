@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="614b4d17-a454-4553-9ee2-1233eefe5977">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="New Dataset 1" uuid="5018d832-e802-4d1f-b63d-4158c50fefa6">
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+    'Ingreso' AS "Tipo Movimiento",
+    SUM(cantidad) AS Total
+FROM 
+    detalle_ingreso
+UNION ALL
+SELECT 
+    'Salida' AS "Tipo Movimiento",
+    SUM(cantidad) AS Total
+FROM 
+    detalle_salida;
+]]>
+		</queryString>
+		<field name="Tipo Movimiento" class="java.lang.String"/>
+		<field name="Total" class="java.math.BigDecimal"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT 
+    'Ingreso' AS "Tipo Movimiento",
+    SUM(cantidad) AS Total
+FROM 
+    detalle_ingreso
+UNION ALL
+SELECT 
+    'Salida' AS "Tipo Movimiento",
+    SUM(cantidad) AS Total
+FROM 
+    detalle_salida;
+]]>
+	</queryString>
+	<field name="Tipo Movimiento" class="java.lang.String"/>
+	<field name="Total" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="150" y="28" width="264" height="26" uuid="91f54323-5dfc-451e-be82-8ee1ffb1805a"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte Movimiento total por tipo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="277" height="20" forecolor="#FFFFFF" backcolor="#0000FF" uuid="bbcd6cac-15cd-4d1f-aaab-93864b52a7d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Movimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="277" y="0" width="277" height="20" forecolor="#FFFFFF" backcolor="#0000FF" uuid="3ebc7b7d-84fb-451f-8d37-2e0c258c7ffe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="277" height="20" uuid="726807b0-4d7f-4f22-89de-32ba392efe19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Tipo Movimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="277" y="0" width="277" height="20" uuid="ae375131-c458-45bb-bc71-4da33b37a529"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="39" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="211" splitType="Stretch">
+			<pie3DChart>
+				<chart>
+					<reportElement x="1" y="36" width="554" height="175" uuid="b11a4bc3-7c16-409d-90a7-de495f4f4c6b"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="New Dataset 1" uuid="79f64f90-9669-46d1-9275-56790e48d8d1"/>
+					</dataset>
+					<keyExpression><![CDATA[$F{Tipo Movimiento}]]></keyExpression>
+					<valueExpression><![CDATA[$F{Total}]]></valueExpression>
+				</pieDataset>
+				<pie3DPlot>
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</summary>
+</jasperReport>

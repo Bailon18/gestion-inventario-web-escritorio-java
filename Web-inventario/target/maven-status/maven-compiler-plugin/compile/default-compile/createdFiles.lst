@@ -1,0 +1,5 @@
+com\micompania\web\inventario\controlador\MovimientoServlet.class
+com\micompania\web\inventario\controlador\UsuarioServlet.class
+com\micompania\web\inventario\Main.class
+com\micompania\web\inventario\controlador\ProductoServlet.class
+com\micompania\web\inventario\controlador\InventarioServlet.class
